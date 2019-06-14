@@ -1,0 +1,18 @@
+constants blue .1 .2 .3 0 0 0 .5 .6 .6
+frames 50
+basename uwu
+move 250 250 0
+rotate x -20
+rotate y 20
+rotate z 20
+push
+rotate x 90
+push
+rotate y 360 rot
+torus blue 0 0 0 100 260
+push
+box blue -235 15 15 470 30 30
+box blue -15 15 235 30 30 470
+push
+rotate y 35
+vary rot 0 48 0 1
