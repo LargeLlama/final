@@ -8,7 +8,7 @@
 void print_pcode()
 {
   int i;
-  for (i=0;i<lastop;i++)
+  for (i = 0;i<lastop;i++)
     {
       printf("%d: ",i);
       switch (op[i].opcode)
@@ -86,6 +86,50 @@ void print_pcode()
             }
 
           break;
+		case PRISM:
+			  printf("Prism: d0: %6.2f %6.2f %6.2f d1: %6.2f %6.2f %6.2f d2: %6.2f %6.2f %6.2f h=%6.2f",
+				op[i].op.prism.d0[0],op[i].op.prism.d0[1],op[i].op.prism.d0[2],
+				op[i].op.prism.d1[0],op[i].op.prism.d1[1],op[i].op.prism.d1[2],
+				op[i].op.prism.d2[0],op[i].op.prism.d2[1],op[i].op.prism.d2[2],
+				op[i].op.prism.h);
+			  if (op[i].op.prism.constants != NULL)
+			    {
+			      printf("\tconstants: %s",op[i].op.prism.constants->name);
+			    }
+			  if (op[i].op.prism.cs != NULL)
+			    {
+			      printf("\tcs: %s",op[i].op.prism.cs->name);
+			    }
+		  break;
+		case CYLINDER:
+			  printf("Cylinder: %6.2f %6.2f %6.2f r=%6.2f h=%6.2f",
+				 op[i].op.cylinder.d[0],op[i].op.cylinder.d[1],
+				 op[i].op.cylinder.d[2],
+				 op[i].op.cylinder.r,op[i].op.cylinder.h);
+			  if (op[i].op.cylinder.constants != NULL)
+			    {
+			      printf("\tconstants: %s",op[i].op.cylinder.constants->name);
+			    }
+			  if (op[i].op.cylinder.cs != NULL)
+			    {
+			      printf("\tcs: %s",op[i].op.cylinder.cs->name);
+			    }
+
+		  break;
+		case CONE:
+			  printf("Cone: %6.2f %6.2f %6.2f r=%6.2f h=%6.2f",
+				 op[i].op.cone.d[0],op[i].op.cone.d[1],
+				 op[i].op.cone.d[2],
+				 op[i].op.cone.r,op[i].op.cone.h);
+			  if (op[i].op.cone.constants != NULL)
+				{
+				  printf("\tconstants: %s",op[i].op.cone.constants->name);
+				}
+			  if (op[i].op.cone.cs != NULL)
+				{
+				  printf("\tcs: %s",op[i].op.cone.cs->name);
+				}
+		  break;
         case LINE:
           printf("Line: from: %6.2f %6.2f %6.2f to: %6.2f %6.2f %6.2f",
                  op[i].op.line.p0[0],op[i].op.line.p0[1],

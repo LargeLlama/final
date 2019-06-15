@@ -630,6 +630,110 @@ void add_edge( struct matrix * points,
   add_point( points, x1, y1, z1 );
 }
 
+//CUSTOM SHAPES 
+/*======== void add_prism() ==========
+Inputs:   struct matrix * polygons 
+		  ints x0, y0, z0, x1, y1, z1, x2, y2, z2 and int h (height)
+Returns: 
+adds the points to form a triangular prism with base points
+(x0, y0, z0), (x1, y1, z1), and (x2, y2, z2)
+====================*/
+
+void add_prism ( struct matrix * polygons,
+double x0, double y0, double z0,
+double x1, double y1, double z1,
+double x2, double y2, double z2, double h){
+
+	add_polygon(polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2);
+	add_polygon(polygons, x0, y0 + h, z0, x2, y2 + h, z2, x1, y1 + h, z1);
+
+	add_polygon(polygons, x2, y2, z2, x2, y2 + h, z2, x0, y0 + h, z0);
+	add_polygon(polygons, x2, y2, z2, x0, y0 + h, z0, x0, y0, z0);
+
+	add_polygon(polygons, x0, y0, z0, x1, y1 + h, z1, x1, y1, z1);
+	add_polygon(polygons, x0, y0, z0, x0, y0 + h, z0, x1, y1 + h, z1);
+
+	add_polygon(polygons, x1, y1, z1, x2, y2 + h, z2, x2, y2, z2);
+	add_polygon(polygons, x1, y1, z1, x1, y1 + h, z1, x2, y2 + h, z2);
+}
+
+/*======== void add_cone() ==========
+Inputs:   
+double cx, cy, cz: points of center of base
+double r: radius of base
+double h: height of cone
+int step: how often it moves "up"
+
+Returns:
+Generates all the points
+of a cone with base center (cx, cy, cz) and
+radius r and height h.
+====================*/
+void add_cone(struct matrix * polygons, double cx, double cy, double cz,
+double r, double h, int step ) {
+
+	//struct matrix *points = new_matrix(4, step * step);
+	//int circle, height, height_start, height_stop, circ_start, circ_stop;
+	double x, y, z, hei, circ, t;
+	double z0, z1, y0, y1, x0, x1;
+
+	x0 = r + cx;
+	y0 = cy;
+	z0 = cz;
+
+	for (int i=1; i<=step; i++) {
+		t = (double)i/step;
+		x1 = r * cos(2 * M_PI * t) + cx;
+		z1 = r * sin(2 * M_PI * t) + cz;
+
+		add_polygon(polygons, x0, cy, z0, x1, cy, z1, cx, cy + h, cz);
+		add_polygon(polygons, cx, cy, cz,  x1, cy, z1, x0, cy, z0);
+
+		x0 = x1;
+		z0 = z1;
+	}
+
+}
+
+/*======== void add_cylinder() ==========
+Inputs:   
+double cx, cy, cz: point for the center of the base of the cylinder
+double r: radius of the base of the cylinder
+double h: height of the cylinder
+int step: how often it goes "up"
+
+Returns: 
+Generates all the points  of a cylinder with base center (cx, cy, cz) and radius r and height h.
+====================*/
+void add_cylinder(struct matrix * polygons, double cx, double cy, double cz,
+double r, double h, int step ) {
+
+	struct matrix * points = new_matrix(4, step * step);
+	int circle, height, height_start, height_stop, circ_start, circ_stop;
+	double x, y, z, hei, circ, t;
+	double z0, z1, y0, y1, x0, x1;
+
+	int i;
+	x0 = r + cx;
+	y0 = cy;
+	z0 = cz;
+
+	for (i=1; i<=step; i++) {
+		t = (double)i/step;
+		x1 = r * cos(2 * M_PI * t) + cx;
+		z1 = r * sin(2 * M_PI * t) + cz;
+
+		add_polygon(polygons, x0, cy, z0, x1, cy, z1, x1, cy + h, z1);
+		add_polygon(polygons, x0, cy, z0, x1, cy + h, z1, x0, cy + h, z0);
+		add_polygon(polygons, cx, cy, cz,  x1, cy, z1, x0, cy, z0);
+		add_polygon(polygons, cx, cy + h, cz, x0, cy + h, z0, x1, cy + h, z1);
+		
+		x0 = x1;
+		z0 = z1;
+	}
+
+}
+
 /*======== void draw_lines() ==========
 Inputs:   struct matrix * points
          screen s

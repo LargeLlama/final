@@ -62,6 +62,28 @@ struct command
       double d0[4],d1[4];
       SYMTAB *cs;
     } box;
+	//new shapes :3
+	struct {
+      SYMTAB *constants;
+      double d0[4],d1[4],d2[4];
+			double h;
+      SYMTAB *cs;
+    } prism;
+    struct {
+      SYMTAB *constants;
+      double d[4];
+      double r;
+			double h;
+      SYMTAB *cs;
+    } cylinder;
+    struct {
+      SYMTAB *constants;
+      double d[4];
+      double r;
+	  double h;
+      SYMTAB *cs;
+    } cone;
+	//end new shapes :3
     struct {
       SYMTAB *constants;
       double p0[4],p1[4];

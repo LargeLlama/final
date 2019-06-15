@@ -34,6 +34,16 @@ void add_torus( struct matrix * edges,
 struct matrix * generate_torus( double cx, double cy, double cz,
                                 double r1, double r2, int step );
 
+//new shapes :3
+void add_cylinder(struct matrix * polygons, double cx, double cy, double cz,
+							double r, double h, int step );
+void add_cone(struct matrix * polygons, double cx, double cy, double cz,
+							double r, double h, int step );
+void add_prism(struct matrix * polygons, 
+double x0, double y0, double z0,
+double x1, double y1, double z1,
+double x2, double y2, double z2, double h);
+
 //2D Curves
 void add_circle( struct matrix * points,
                  double cx, double cy, double cz,

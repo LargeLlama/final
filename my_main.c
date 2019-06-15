@@ -307,7 +307,40 @@ void my_main() {
                     draw_polygons(tmp, t, zb, view, light, ambient, reflect);
                     tmp->lastcol = 0;
                     reflect = &white;
-                    break;
+                break;
+				case PRISM:
+					add_prism(tmp,
+							op[i].op.prism.d0[0],op[i].op.prism.d0[1],
+							op[i].op.prism.d0[2],
+							op[i].op.prism.d1[0],op[i].op.prism.d1[1],
+							op[i].op.prism.d1[2],
+							op[i].op.prism.d2[0],op[i].op.prism.d2[1],
+							op[i].op.prism.d2[2],
+											op[i].op.prism.h);
+					matrix_mult( peek(systems), tmp );
+					draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+					tmp->lastcol = 0;
+		        break;
+				case CYLINDER:
+					add_cylinder(tmp,
+							  op[i].op.cylinder.d[0],
+							  op[i].op.cylinder.d[1],
+							  op[i].op.cylinder.d[2],
+							  op[i].op.cylinder.r,op[i].op.cylinder.h, step_3d);
+					matrix_mult( peek(systems), tmp );
+					draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+					tmp->lastcol = 0;
+			    break;
+  			    case CONE:
+				  add_cone(tmp,
+						  op[i].op.cone.d[0],
+						  op[i].op.cone.d[1],
+						  op[i].op.cone.d[2],
+						  op[i].op.cone.r,op[i].op.cone.h, step_3d);
+				  matrix_mult( peek(systems), tmp );
+					draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+					tmp->lastcol = 0;
+		        break;
                 case LINE:
                     printf("Line: from: %6.2f %6.2f %6.2f to: %6.2f %6.2f %6.2f",
                         op[i].op.line.p0[0],op[i].op.line.p0[1],
