@@ -1,0 +1,22 @@
+frames 100
+basename final
+push
+move 200 425 250
+move 20 -250 0 mov
+rotate y 360 spin
+rotate x 45
+rotate z 20
+cylinder 0 -10 0 100 10
+cylinder 0 0 0 50 75
+move 150 150 10
+cone 0 0 0 30 70
+cone -200 -200 -200 30 70
+move -350 -575 -260
+move 100 50 0
+prism 0 0 0 60 0 0 30 0 40 50 
+prism 100 50 50 120 10 50 80 60 120 50 
+rotate z 30
+rotate x 15
+rotate y 360 spin
+vary mov 0 99 0 2 3
+vary spin 0 99 0 2 2

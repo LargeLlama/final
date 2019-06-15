@@ -223,7 +223,7 @@ void my_main() {
   g.red = 0;
   g.green = 0;
   g.blue = 0;
-  double step_3d = 20;
+  double step_3d = 100;
   double theta;
   double knob_value, xval, yval, zval;
 
@@ -235,16 +235,16 @@ void my_main() {
   double dreflect[3];
   double sreflect[3];
 
-  ambient.red = 50;
-  ambient.green = 50;
-  ambient.blue = 50;
+  ambient.red = 100;
+  ambient.green = 0;
+  ambient.blue = 255;
 
   light[LOCATION][0] = 0.5;
   light[LOCATION][1] = 0.75;
   light[LOCATION][2] = 1;
 
-  light[COLOR][RED] = 0;
-  light[COLOR][GREEN] = 255;
+  light[COLOR][RED] = 150;
+  light[COLOR][GREEN] = 0;
   light[COLOR][BLUE] = 255;
 
   view[0] = 0;
