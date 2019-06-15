@@ -9,10 +9,6 @@
 #define SYM_FILE   5
 #define SYM_STRING 5
 
-#define AMBIENT_R 0
-#define DIFFUSE_R 1
-#define SPECULAR_R 2
-
 struct constants
 {
   double r[4];

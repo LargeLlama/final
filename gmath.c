@@ -5,31 +5,16 @@
 #include "gmath.h"
 #include "matrix.h"
 #include "ml6.h"
-#include "symtab.h"
-
-/*============================================
-  IMPORANT NOTE
-
-  Ambient light is represeneted by a color value
-
-  Point light sources are 2D arrays of doubles.
-       - The fist index (LOCATION) represents the vector to the light.
-       - The second index (COLOR) represents the color.
-
-  Reflection constants (ka, kd, ks) are represened as arrays of
-  doubles (red, green, blue)
-  ============================================*/
-
 
 //lighting functions
-color get_lighting( double *normal, double *view, color alight, double light[2][3], struct constants *reflect) {
+color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
 
   color a, d, s, i;
   normalize(normal);
 
-  a = calculate_ambient( alight, reflect );
-  d = calculate_diffuse( light, reflect, normal );
-  s = calculate_specular( light, reflect, view, normal );
+  a = calculate_ambient( alight, areflect );
+  d = calculate_diffuse( light, dreflect, normal );
+  s = calculate_specular( light, sreflect, view, normal );
 
   i.red = a.red + d.red + s.red;
   i.green = a.green + d.green + s.green;
@@ -39,16 +24,16 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   return i;
 }
 
-color calculate_ambient(color alight, struct constants *reflect ) {
+color calculate_ambient(color alight, double *areflect ) {
   color a;
-  a.red = alight.red * reflect->r[AMBIENT_R];
-  a.green = alight.green * reflect->g[AMBIENT_R];
-  a.blue = alight.blue * reflect->b[AMBIENT_R];
+  a.red = alight.red * areflect[RED];
+  a.green = alight.green * areflect[GREEN];
+  a.blue = alight.blue * areflect[BLUE];
 
   return a;
 }
 
-color calculate_diffuse(double light[2][3], struct constants *reflect, double *normal ) {
+color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
   color d;
   double dot;
   double lvector[3];
@@ -60,14 +45,15 @@ color calculate_diffuse(double light[2][3], struct constants *reflect, double *n
 
   dot = dot_product(normal, lvector);
 
-  d.red = (int)(light[COLOR][RED] * reflect->r[DIFFUSE_R] * dot);
-  d.green = (int)(light[COLOR][GREEN] * reflect->g[DIFFUSE_R] * dot);
-  d.blue = (int)(light[COLOR][BLUE] * reflect->b[DIFFUSE_R] * dot);
+  d.red = (int)(light[COLOR][RED] * dreflect[RED] * dot);
+  d.green = (int)(light[COLOR][GREEN] * dreflect[GREEN] * dot);
+  d.blue = (int)(light[COLOR][BLUE] * dreflect[BLUE] * dot);
 
   return d;
 }
 
-color calculate_specular(double light[2][3], struct constants *reflect, double *view, double *normal ) {
+color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
+
   color s;
   double lvector[3];
   double result;
@@ -87,12 +73,13 @@ color calculate_specular(double light[2][3], struct constants *reflect, double *
   result = result > 0 ? result : 0;
   result = pow( result, SPECULAR_EXP );
 
-  s.red = (int)(light[COLOR][RED] * reflect->r[SPECULAR_R] * result);
-  s.green = (int)(light[COLOR][GREEN] * reflect->g[SPECULAR_R] * result);
-  s.blue = (int)(light[COLOR][BLUE] * reflect->b[SPECULAR_R] * result);
+  s.red = (int)(light[COLOR][RED] * sreflect[RED] * result);
+  s.green = (int)(light[COLOR][GREEN] * sreflect[GREEN] * result);
+  s.blue = (int)(light[COLOR][BLUE] * sreflect[BLUE] * result);
 
   return s;
 }
+
 
 //limit each component of c to a max of 255
 void limit_color( color * c ) {
@@ -123,9 +110,6 @@ double dot_product( double *a, double *b ) {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
-
-//Calculate the surface normal for the triangle whose first
-//point is located at index i in polygons
 double *calculate_normal(struct matrix *polygons, int i) {
 
   double A[3];

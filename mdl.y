@@ -1,12 +1,12 @@
 %{
   /* C declarations */
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include "parser.h"
-  #include "matrix.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "parser.h"
+#include "matrix.h"
 
-  #define YYERROR_VERBOSE 1
+#define YYERROR_VERBOSE 1
 
   SYMTAB *s;
   struct light *l;
@@ -15,7 +15,6 @@
   struct matrix *m;
   int lastop=0;
   int lineno=0;
-
   %}
 
 
@@ -30,7 +29,7 @@
 %token <val> DOUBLE
 %token <string> LIGHT AMBIENT
 %token <string> CONSTANTS SAVE_COORDS CAMERA
-%token <string> SPHERE TORUS BOX LINE CS MESH TEXTURE CYLINDER CONE PRISM
+%token <string> SPHERE TORUS BOX CYLINDER CONE PRISM LINE CS MESH TEXTURE
 %token <string> STRING
 %token <string> SET MOVE SCALE ROTATE BASENAME SAVE_KNOBS TWEEN FRAMES VARY
 %token <string> PUSH POP SAVE GENERATE_RAYFILES
@@ -237,6 +236,61 @@ BOX STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE STRING
   op[lastop].op.box.constants = add_symbol($2,SYM_CONSTANTS,c);
   m = (struct matrix *)new_matrix(4,4);
   op[lastop].op.box.cs = add_symbol($9,SYM_MATRIX,m);
+
+  lastop++;
+}|
+
+PRISM DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = PRISM;
+  op[lastop].op.prism.d0[0] = $2;
+  op[lastop].op.prism.d0[1] = $3;
+  op[lastop].op.prism.d0[2] = $4;
+  op[lastop].op.prism.d0[3] = 0;
+  op[lastop].op.prism.d1[0] = $5;
+  op[lastop].op.prism.d1[1] = $6;
+  op[lastop].op.prism.d1[2] = $7;
+  op[lastop].op.prism.d1[3] = 0;
+  op[lastop].op.prism.d2[0] = $8;
+  op[lastop].op.prism.d2[1] = $9;
+  op[lastop].op.prism.d2[2] = $10;
+  op[lastop].op.prism.d2[3] = 0;
+  op[lastop].op.prism.h = $11;
+
+  op[lastop].op.prism.constants = NULL;
+  op[lastop].op.prism.cs = NULL;
+  lastop++;
+}|
+
+CYLINDER DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = CYLINDER;
+  op[lastop].op.cylinder.d[0] = $2;
+  op[lastop].op.cylinder.d[1] = $3;
+  op[lastop].op.cylinder.d[2] = $4;
+  op[lastop].op.cylinder.d[3] = 0;
+  op[lastop].op.cylinder.r = $5;
+  op[lastop].op.cylinder.h = $6;
+  op[lastop].op.cylinder.constants = NULL;
+  op[lastop].op.cylinder.cs = NULL;
+
+  lastop++;
+}|
+
+CONE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = CONE;
+  op[lastop].op.cone.d[0] = $2;
+  op[lastop].op.cone.d[1] = $3;
+  op[lastop].op.cone.d[2] = $4;
+  op[lastop].op.cone.d[3] = 0;
+  op[lastop].op.cone.r = $5;
+  op[lastop].op.cone.h = $6;
+  op[lastop].op.cone.constants = NULL;
+  op[lastop].op.cone.cs = NULL;
 
   lastop++;
 }|
@@ -724,6 +778,19 @@ VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE
   lastop++;
 }|
 
+VARY STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = VARY;
+  op[lastop].op.vary.p = add_symbol($2,SYM_STRING,0);
+  op[lastop].op.vary.start_frame = $3;
+  op[lastop].op.vary.end_frame = $4;
+  op[lastop].op.vary.start_val = $5;
+  op[lastop].op.vary.end_val = $6;
+	op[lastop].op.vary.exponent = $7;
+  lastop++;
+}|
+
 SHADING SHADING_TYPE
 {
   lineno++;
@@ -782,6 +849,7 @@ int yywrap()
 {
   return 1;
 }
+
 
 extern FILE *yyin;
 

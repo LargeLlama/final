@@ -26,12 +26,12 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 "torus" { return TORUS;}
 "sphere" { return SPHERE;}
 "box" {return BOX;}
+"cylinder" {return CYLINDER;}
+"cone" {return CONE;}
+"prism" {return PRISM;}
 "line" {return LINE;}
 "mesh" {return MESH;}
 "texture" {return TEXTURE;}
-"cone" { return CONE; }
-"prism" { return PRISM; }
-"cylinder" { return CYLINDER; }
 
 "set" {return SET;}
 "move" {return MOVE;}

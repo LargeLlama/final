@@ -1,25 +1,16 @@
-/*==========================================
-  A matrix will be a 4xN array of doubles
-  Each column will represent an [x, y, z, 1] point.
-  For multiplication purposes, consider the rows like so:
-  x0  x1      xn
-  y0  y1      yn
-  z0  z1  ... zn
-  1  1        1
-  ==========================================*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
 #include "matrix.h"
 
-
 /*======== struct matrix * make_bezier() ==========
-  Returns: The correct 4x4 matrix that can be used
+  Inputs:   
+  Returns: The correct 4x4 matrix that can be used 
   to generate the coefiecients for a bezier curve
   ====================*/
 struct matrix * make_bezier() {
-    struct matrix *bm = new_matrix(4, 4);
+  struct matrix *bm = new_matrix(4, 4);
   bm->lastcol = 4;
   bm->m[0][0] = -1;
   bm->m[0][1] = 3;
@@ -45,11 +36,14 @@ struct matrix * make_bezier() {
 }
 
 /*======== struct matrix * make_hermite() ==========
-  Returns: The correct 4x4 matrix that can be used
-  to generae the coefiecients for a hermite curve
+  Inputs:   
+  Returns: 
+
+  The correct 4x4 matrix that can be used to generate
+  the coefiecients for a hermite curve
   ====================*/
 struct matrix * make_hermite() {
-   struct matrix *bm = new_matrix(4, 4);
+  struct matrix *bm = new_matrix(4, 4);
   bm->lastcol = 4;
   bm->m[0][0] = 2;
   bm->m[0][1] = -2;
@@ -75,21 +69,26 @@ struct matrix * make_hermite() {
 }
 
 /*======== struct matrix * generate_curve_coefs() ==========
-  Inputs:   double p1
-            double p2
-            double p3
-            double p4
-            int type
-  Returns:
+  Inputs:   double p0
+            double p1
+	    double p2
+	    double p3
+	    int type
+  Returns: 
+  
   A matrix containing the values for a, b, c and d of the
-  equation at^3 + bt^2 + ct + d for the curve defined
-  by p1, p2, p3 and p4.
+  equation at^3 + bt^2 + ct + d for the curve defined 
+  by p0, p1, p2 and p3.
 
-  Type determines whether the curve is bezier or hermite (see matrix.h)
+  For hermite curves, p0 and p1 are endpoints, p2 and p3
+  are rates of change
+  
+  Type determines whether the curve is bezier or hermite
   ====================*/
-struct matrix * generate_curve_coefs( double p0, double p1,
-                                      double p2, double p3, int type) {
-    struct matrix *curve;
+struct matrix * generate_curve_coefs( double p0, double p1, 
+				      double p2, double p3, int type) {
+
+  struct matrix *curve;
   struct matrix *coefs = new_matrix(4, 1);
 
   coefs->lastcol = 1;
@@ -111,6 +110,7 @@ struct matrix * generate_curve_coefs( double p0, double p1,
 
   return coefs;
 }
+
 
 /*======== struct matrix * make_translate() ==========
 Inputs:  int x
@@ -202,9 +202,9 @@ struct matrix * make_rotZ(double theta) {
 
 /*-------------- void print_matrix() --------------
 Inputs:  struct matrix *m 
+Returns: 
 
-print the matrix such that it looks like
-the template in the top comment
+print the matrix
 */
 void print_matrix(struct matrix *m) {
 
@@ -218,6 +218,7 @@ void print_matrix(struct matrix *m) {
 
 /*-------------- void ident() --------------
 Inputs:  struct matrix *m <-- assumes m is a square matrix
+Returns: 
 
 turns m in to an identity matrix
 */
@@ -234,11 +235,26 @@ void ident(struct matrix *m) {
 }//end ident
 
 
+/*-------------- void scalar_mult() --------------
+Inputs:  double x
+         struct matrix *m 
+Returns: 
+
+multiply each element of m by x
+*/
+void scalar_mult(double x, struct matrix *m) {  
+  int r, c;
+  for (r=0; r < m->rows; r++)
+    for (c=0; c < m->lastcol; c++) 
+      m->m[r][c] *= x;
+}//end scalar_mult
+
+
 /*-------------- void matrix_mult() --------------
 Inputs:  struct matrix *a
-         struct matrix *b
+         struct matrix *b 
+Returns: 
 
-multiply a by b, modifying b to be the product
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {

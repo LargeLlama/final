@@ -1,4 +1,3 @@
-
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
@@ -11,5 +10,4 @@ void save_ppm( screen s, char *file);
 void save_extension( screen s, char *file);
 void display( screen s);
 void make_animation( char * name );
-
 #endif

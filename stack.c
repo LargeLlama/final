@@ -29,6 +29,17 @@ struct stack * new_stack() {
   return s;
 }
 
+/*======== struct matix *peek() ==========
+  Inputs:   struct stack *s  
+  Returns: 
+
+  Returns a reference to the matrix at the 
+  top of the stack
+  ====================*/
+struct matrix * peek( struct stack *s ) {
+  return s->data[s->top];
+}
+
 /*======== void push() ==========
   Inputs:   struct stack *s  
   Returns: 
@@ -41,10 +52,10 @@ void push( struct stack *s ) {
 
   struct matrix *m;
   m = new_matrix(4, 4);
-
+  
   if ( s->top == s->size - 1 ) {
     s->data = (struct matrix **)realloc( s->data, (s->size + STACK_SIZE)
-                                         * sizeof(struct matrix *));
+					 * sizeof(struct matrix *));
     s->size = s->size + STACK_SIZE;
   }
 
@@ -52,17 +63,6 @@ void push( struct stack *s ) {
 
   s->top++;
   s->data[ s->top ] = m;  
-}
-
-/*======== struct matix *peek() ==========
-  Inputs:   struct stack *s  
-  Returns: 
-
-  Returns a reference to the matrix at the 
-  top of the stack
-  ====================*/
-struct matrix * peek( struct stack *s ) {
-  return s->data[s->top];
 }
 
 /*======== void pop() ==========

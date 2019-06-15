@@ -2,10 +2,11 @@
 
 Header file for fucntions we will use in ml6
 
-Sets the maximum XYES and YRES for images as well as the maximum
-color value you want to use.
+Sets the maximum XYES and YRES for images as well
+as the maximum color value you want to use.
 
-Creates the point structure in order to represent a pixel as a color triple
+Creates the point structure in order to represent 
+a pixel as a color triple
 =========================*/
 #ifndef ML6_H
 #define ML6_H
@@ -13,7 +14,6 @@ Creates the point structure in order to represent a pixel as a color triple
 #define XRES 500
 #define YRES 500
 #define MAX_COLOR 255
-#define DEFAULT_COLOR 0
 
 /*
   Every point has an individual int for
